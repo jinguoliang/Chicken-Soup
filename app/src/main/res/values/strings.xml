@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Chicken Soup</string>
+    <string name="push_up">俯卧撑:</string>
+    <string name="edit_default_value">0</string>
+</resources>
