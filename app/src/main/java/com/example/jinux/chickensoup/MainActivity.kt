@@ -8,9 +8,13 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
+import org.jetbrains.anko.sdk25.coroutines.onItemClick
+import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +29,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     lateinit var sumScore: TextView
     lateinit var base: TextView
     lateinit var newScore: TextView
+    lateinit var actionSpinner: Spinner
 
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         relativeLayout {
@@ -33,8 +38,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
             val scoreLine = linearLayout {
                 id = android.R.id.text1
-                textView {
-                    text = resources.getString(R.string.push_up)
+                actionSpinner = spinner {
+                    adapter = ArrayAdapter<String>(ui.ctx, android.R.layout.simple_list_item_1,
+                            resources.getStringArray(R.array.action))
                 }
                 sumScore = textView {
                     hint = "总成绩"
@@ -100,8 +106,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     val sum = sumScore.text.toString().toInt()
                     val base = base.text.toString().toInt()
                     val new = newScore.text.toString().toInt()
+                    val action = actionSpinner.selectedItem
 
-                    val msg = "俯卧撑: $sum = $base + $new"
+                    val msg = "$action: $sum = $base + $new"
                     val intent = Intent(Intent.ACTION_SEND)
                     intent.putExtra(Intent.EXTRA_TEXT, msg)
                     intent.setType("text/plain")

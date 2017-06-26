@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="action">
+        <item>@string/push_up</item>
+        <item>@string/site_up</item>
+    </string-array>
+</resources>
