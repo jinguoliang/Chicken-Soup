@@ -20,11 +20,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val ui = MainActivityUI()
-        ui.setContentView(this)
 
         val mMainPresenter: MainPresenter = MainPresenter(this)
         mMainPresenter.attachView(ui)
         ui.setPresenter(mMainPresenter)
+
+        ui.setContentView(this)
     }
 }
 
@@ -60,9 +61,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 }
                 editText {
                     hint = "基数"
+                    setText(mMainPresenter.getSumScore())
                     gravity = Gravity.CENTER
                     inputType = InputType.TYPE_CLASS_NUMBER
-                    setText(context.getString(R.string.edit_default_value))
                     setSelectAllOnFocus(true)
                     addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {
@@ -138,6 +139,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 }
 
 class MainPresenter(val mContext: MainActivity) {
+    private val mDatabase = FakeDataBase(mContext)
     private var mBaseScore: Int = 0
     private var mNewScore: Int = 0
     private var mSumScore: Int = 0
@@ -159,6 +161,8 @@ class MainPresenter(val mContext: MainActivity) {
     }
 
     fun onShareClick() {
+        mDatabase.saveTodaySum(mSumScore)
+
         val action = mView.getAction()
 
         val msg = "$action: $mSumScore = $mBaseScore + $mNewScore"
@@ -172,6 +176,10 @@ class MainPresenter(val mContext: MainActivity) {
 
     fun attachView(view: MainActivityUI) {
         mView = view
+    }
+
+    fun  getSumScore(): String {
+        return mDatabase.getTodaySum().toString()
     }
 
 }
