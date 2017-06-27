@@ -7,14 +7,12 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
-import org.jetbrains.anko.sdk25.coroutines.onItemClick
-import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
+import org.jetbrains.anko.sdk25.coroutines.onFocusChange
 
 class MainActivity : AppCompatActivity() {
 
@@ -55,6 +53,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     gravity = Gravity.CENTER
                     inputType = InputType.TYPE_CLASS_NUMBER
                     setText(context.getString(R.string.edit_default_value))
+                    setSelectAllOnFocus(true)
                     addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {
                             if (s == null || s.isEmpty()) return
@@ -78,6 +77,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     hint = "新成绩"
                     gravity = Gravity.CENTER
                     setText(context.getString(R.string.edit_default_value))
+                    setSelectAllOnFocus(true)
                     inputType = InputType.TYPE_CLASS_NUMBER
                     addTextChangedListener(object : TextWatcher {
                         override fun afterTextChanged(s: Editable?) {
