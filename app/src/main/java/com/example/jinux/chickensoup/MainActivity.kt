@@ -7,6 +7,7 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
@@ -32,6 +33,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     lateinit var mMainPresenter: MainPresenter
 
     lateinit private var mSumScoreTv: TextView
+    lateinit private var mSoupTv: TextView
 
     lateinit private var mActionSpin: Spinner
 
@@ -122,6 +124,16 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 topMargin = dip(30)
                 centerHorizontally()
             }
+
+            mSoupTv = textView {
+                text = "It's well"
+                textSize = 25f
+                visibility = View.INVISIBLE
+            }.lparams {
+                above(scoreLine)
+                bottomMargin = dip(30)
+                centerHorizontally()
+            }
         }
     }.view()
 
@@ -139,6 +151,15 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     fun setBaseScore(base: Int) {
         mBaseScoreEt.setText(base.toString())
+    }
+
+    fun showChicken(s: String) {
+        mSoupTv.text = s
+        mSoupTv.visibility = View.VISIBLE
+    }
+
+    fun hideChicken() {
+        mSoupTv.visibility = View.INVISIBLE
     }
 }
 
@@ -167,6 +188,12 @@ class MainPresenter(val mContext: MainActivity) {
     fun onShareClick() {
         mDatabase.saveTodaySum(mSumScore)
 
+        if (mSumScore >= 100 || mNewScore >= 60) {
+            mView.showChicken(CHICKEN[((Math.random() * CHICKEN.size).toInt())])
+        } else {
+            mView.hideChicken();
+        }
+
         val action = mView.getAction()
 
         val msg = "$action: $mSumScore = $mBaseScore + $mNewScore"
@@ -182,10 +209,6 @@ class MainPresenter(val mContext: MainActivity) {
         mView = view
         mView.setPresenter(this)
         mView.setBaseScore(mBaseScore)
-    }
-
-    fun getSumScore(): String {
-        return mDatabase.getTodaySum().toString()
     }
 
 }
