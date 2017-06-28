@@ -8,6 +8,7 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import org.jetbrains.anko.*
@@ -20,12 +21,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val ui = MainActivityUI()
-
-        val mMainPresenter: MainPresenter = MainPresenter(this)
-        mMainPresenter.attachView(ui)
-        ui.setPresenter(mMainPresenter)
-
         ui.setContentView(this)
+
+        MainPresenter(this).attachView(ui)
     }
 }
 
@@ -36,6 +34,8 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     lateinit private var mSumScoreTv: TextView
 
     lateinit private var mActionSpin: Spinner
+
+    lateinit private var mBaseScoreEt: EditText
 
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         relativeLayout {
@@ -59,9 +59,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 textView {
                     text = " = "
                 }
-                editText {
+                mBaseScoreEt = editText {
                     hint = "基数"
-                    setText(mMainPresenter.getSumScore())
+                    setText("0")
                     gravity = Gravity.CENTER
                     inputType = InputType.TYPE_CLASS_NUMBER
                     setSelectAllOnFocus(true)
@@ -136,11 +136,15 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     fun getAction(): String {
         return mActionSpin.selectedItem.toString()
     }
+
+    fun setBaseScore(base: Int) {
+        mBaseScoreEt.setText(base.toString())
+    }
 }
 
 class MainPresenter(val mContext: MainActivity) {
     private val mDatabase = FakeDataBase(mContext)
-    private var mBaseScore: Int = 0
+    private var mBaseScore: Int = mDatabase.getTodaySum()
     private var mNewScore: Int = 0
     private var mSumScore: Int = 0
 
@@ -176,9 +180,11 @@ class MainPresenter(val mContext: MainActivity) {
 
     fun attachView(view: MainActivityUI) {
         mView = view
+        mView.setPresenter(this)
+        mView.setBaseScore(mBaseScore)
     }
 
-    fun  getSumScore(): String {
+    fun getSumScore(): String {
         return mDatabase.getTodaySum().toString()
     }
 
