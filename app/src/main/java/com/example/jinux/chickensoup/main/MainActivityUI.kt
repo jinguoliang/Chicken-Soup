@@ -5,9 +5,8 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
+import com.example.jinux.chickensoup.data.TodayRecord
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
@@ -23,10 +22,20 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     lateinit private var mBaseScoreEt: TextView
 
+    lateinit private var  mRecords: ListView
+
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
-        relativeLayout {
+        verticalLayout {
             padding = dip(10)
             gravity = Gravity.CENTER_HORIZONTAL
+
+
+            mSoupTv = textView {
+                textSize = 25f
+                visibility = View.INVISIBLE
+            }.lparams {
+                bottomMargin = dip(30)
+            }
 
             val scoreLine = linearLayout {
                 id = android.R.id.text1
@@ -94,8 +103,6 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
                     })
                 }
-            }.lparams {
-                centerInParent()
             }
 
             button {
@@ -104,19 +111,15 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     mMainPresenter.onShareClick()
                 }
             }.lparams {
-                below(scoreLine)
                 topMargin = dip(30)
-                centerHorizontally()
             }
 
-            mSoupTv = textView {
-                textSize = 25f
-                visibility = View.INVISIBLE
+            // records
+            mRecords = listView {
             }.lparams {
-                above(scoreLine)
-                bottomMargin = dip(30)
-                centerHorizontally()
+                height = matchParent
             }
+
         }
     }.view()
 
@@ -143,5 +146,10 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     fun hideChicken() {
         mSoupTv.visibility = View.INVISIBLE
+    }
+
+    fun updateRecords(data: List<TodayRecord>) {
+        mRecords.adapter = ArrayAdapter<String>(mRecords.context,
+                android.R.layout.simple_list_item_1, data as MutableList<String>)
     }
 }
