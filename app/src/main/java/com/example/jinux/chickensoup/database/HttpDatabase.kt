@@ -1,6 +1,7 @@
 package com.example.jinux.chickensoup.database
 
 import android.content.Context
+import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.data.NewScore
 import com.example.jinux.chickensoup.data.TodayRecord
@@ -23,13 +24,20 @@ class HttpDataBase(val context: Context) {
     }
 
     private val PROTOCAL = "http://"
-    val HOST = "118.89.39.72"
-    val POST_AMOUNT_OF_USER = "/soup/api/categories/%s/users/%s/amounts/"
-    val GET_AMOUNT_AT_SOMEDAY = "/soup/api/categories/%s/amounts/%s/"
-    val GET_LIST_OF_SOMEDAY = "/soup/api/categories/%s/amounts/%s/records/"
+    private val HOST_RELEASE = "118.89.39.72"
+    private val HOST_DEBUG = "118.89.39.72:81"
+    private val POST_AMOUNT_OF_USER = "/soup/api/categories/%s/users/%s/amounts/"
+    private val GET_AMOUNT_AT_SOMEDAY = "/soup/api/categories/%s/amounts/%s/"
+    private val GET_LIST_OF_SOMEDAY = "/soup/api/categories/%s/amounts/%s/records/"
+
+    private val host = if (BuildConfig.DEBUG) HOST_DEBUG else HOST_RELEASE
+
+    private fun generateURL(path: String): String {
+        return PROTOCAL + host + path
+    }
 
     fun saveTodaySum(newScore: Int) {
-        val urlStr = String.format(PROTOCAL + HOST + POST_AMOUNT_OF_USER, "pop-up", generateUserId(context))
+        val urlStr = String.format(generateURL(POST_AMOUNT_OF_USER), "pop-up", generateUserId(context))
         logD("saveTodaySum: " + urlStr)
         Http.post {
             url = urlStr
@@ -44,7 +52,7 @@ class HttpDataBase(val context: Context) {
     }
 
     fun getTodaySum(callBack: (sum: Int) -> Unit): Unit {
-        val urlStr = String.format(PROTOCAL + HOST + GET_AMOUNT_AT_SOMEDAY, "pop-up", formatToday(context.getString(R.string.data_fmt)))
+        val urlStr = String.format(generateURL(GET_AMOUNT_AT_SOMEDAY), "pop-up", formatToday(context.getString(R.string.data_fmt)))
         logD("getTodaySum: " + urlStr)
         Http.get {
             url = urlStr
@@ -61,7 +69,7 @@ class HttpDataBase(val context: Context) {
     }
 
     fun getTodayRecords(callBack: (sum: List<TodayRecord>) -> Unit): Unit {
-        val urlStr = String.format(PROTOCAL + HOST + GET_LIST_OF_SOMEDAY, "pop-up", formatToday(context.getString(R.string.data_fmt)))
+        val urlStr = String.format(generateURL(GET_LIST_OF_SOMEDAY), "pop-up", formatToday(context.getString(R.string.data_fmt)))
         logD("getTodayRecords: " + urlStr)
         Http.get {
             url = urlStr
