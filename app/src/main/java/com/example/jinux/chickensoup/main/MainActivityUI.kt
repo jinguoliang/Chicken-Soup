@@ -1,34 +1,16 @@
-package com.example.jinux.chickensoup
+package com.example.jinux.chickensoup.main
 
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
-import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
-
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val ui = MainActivityUI()
-        ui.setContentView(this)
-
-        MainPresenter(this).attachView(ui)
-
-        logD("JIN","md5 = " + generateUserId(this))
-    }
-}
 
 class MainActivityUI : AnkoComponent<MainActivity> {
 
@@ -39,7 +21,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     lateinit private var mActionSpin: Spinner
 
-    lateinit private var mBaseScoreEt: EditText
+    lateinit private var mBaseScoreEt: TextView
 
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         relativeLayout {
@@ -50,7 +32,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 id = android.R.id.text1
                 mActionSpin = spinner {
                     adapter = ArrayAdapter<String>(ui.ctx, android.R.layout.simple_list_item_1,
-                            resources.getStringArray(R.array.action))
+                            resources.getStringArray(com.example.jinux.chickensoup.R.array.action))
                     onItemSelectedListener {
                         toast("Hello" + selectedItem)
                     }
@@ -63,9 +45,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 textView {
                     text = " = "
                 }
-                mBaseScoreEt = editText {
+                mBaseScoreEt = textView {
                     hint = "基数"
-                    setText("0")
+                    text = "0"
                     gravity = Gravity.CENTER
                     inputType = InputType.TYPE_CLASS_NUMBER
                     setSelectAllOnFocus(true)
@@ -92,7 +74,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 editText {
                     hint = "新成绩"
                     gravity = Gravity.CENTER
-                    setText(context.getString(R.string.edit_default_value))
+                    setText(context.getString(com.example.jinux.chickensoup.R.string.edit_default_value))
                     setSelectAllOnFocus(true)
                     inputType = InputType.TYPE_CLASS_NUMBER
                     addTextChangedListener(object : TextWatcher {
@@ -128,7 +110,6 @@ class MainActivityUI : AnkoComponent<MainActivity> {
             }
 
             mSoupTv = textView {
-                text = "It's well"
                 textSize = 25f
                 visibility = View.INVISIBLE
             }.lparams {
@@ -152,7 +133,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     }
 
     fun setBaseScore(base: Int) {
-        mBaseScoreEt.setText(base.toString())
+        mBaseScoreEt.text = base.toString()
     }
 
     fun showChicken(s: String) {
@@ -163,58 +144,4 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     fun hideChicken() {
         mSoupTv.visibility = View.INVISIBLE
     }
-}
-
-class MainPresenter(val mContext: MainActivity) {
-    private val mDatabase = HttpDataBase(mContext)
-    private var mBaseScore: Int = 0
-    private var mNewScore: Int = 0
-    private var mSumScore: Int = 0
-
-    fun onBaseEditChanged(baseScore: Int) {
-        mBaseScore = baseScore
-        updateSumScore()
-    }
-
-    private fun updateSumScore() {
-        mSumScore = mBaseScore + mNewScore
-        mView.updateSumScore(mSumScore)
-    }
-
-
-    fun onNewScoreEditChanged(newScore: Int) {
-        mNewScore = newScore
-        updateSumScore()
-    }
-
-    fun onShareClick() {
-        mDatabase.saveTodaySum(mNewScore)
-
-        if (mSumScore >= 100 || mNewScore >= 60) {
-            mView.showChicken(CHICKEN[((Math.random() * CHICKEN.size).toInt())])
-        } else {
-            mView.hideChicken();
-        }
-
-        val action = mView.getAction()
-
-        val msg = "$action: $mSumScore = $mBaseScore + $mNewScore"
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.putExtra(Intent.EXTRA_TEXT, msg)
-        intent.type = "text/plain"
-        mContext.ctx.startActivity(intent)
-    }
-
-    lateinit private var mView: MainActivityUI
-
-    fun attachView(view: MainActivityUI) {
-        mView = view
-        mView.setPresenter(this)
-
-        mDatabase.getTodaySum {
-            mBaseScore = it
-            mView.setBaseScore(mBaseScore)
-        }
-    }
-
 }
