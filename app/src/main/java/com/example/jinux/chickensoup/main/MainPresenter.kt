@@ -64,7 +64,7 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it)
+            mView.updateRecords(it.map { RecordItem(it.user_id, it.category, it.amount, it.created_time) })
         }
     }
 
@@ -76,3 +76,5 @@ class MainPresenter(val mContext: MainActivity) {
     }
 
 }
+
+data class RecordItem(val who: String, val action: String, val amount: Int, val time: String)

@@ -4,12 +4,11 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Spinner
-import android.widget.TextView
-import com.example.jinux.chickensoup.data.TodayRecord
+import android.view.ViewGroup
+import android.widget.*
+import com.example.jinux.chickensoup.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
@@ -123,6 +122,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
             mRecords = listView {
             }.lparams {
                 height = matchParent
+                margin = dip(20)
             }
 
         }
@@ -153,8 +153,38 @@ class MainActivityUI : AnkoComponent<MainActivity> {
         mSoupTv.visibility = View.INVISIBLE
     }
 
-    fun updateRecords(data: List<TodayRecord>) {
-        mRecords.adapter = ArrayAdapter<String>(mRecords.context,
-                android.R.layout.simple_list_item_1, data as MutableList<String>)
+    fun updateRecords(data: List<RecordItem>) {
+        mRecords.adapter = RecordListAdapter(data)
     }
+}
+
+class RecordListAdapter(val data: List<RecordItem>) : BaseAdapter() {
+    override fun getView(p: Int, v: View?, parent: ViewGroup?): View {
+        val item = data[p]
+
+        var view = v
+        if (view == null) {
+            view = LayoutInflater.from(parent!!.context).inflate(R.layout.item_record_list, parent, false)
+        }
+
+        view!!.findViewById<TextView>(R.id.userName).setText(item.who)
+        view.findViewById<TextView>(R.id.time).text = "at ${item.time}"
+        view.findViewById<TextView>(R.id.action).text = item.action
+        view.findViewById<TextView>(R.id.amount).text = ": ${item.amount}"
+
+        return view
+    }
+
+    override fun getItem(p: Int): Any {
+        return data[p]
+    }
+
+    override fun getItemId(p: Int): Long {
+        return p.toLong()
+    }
+
+    override fun getCount(): Int {
+        return data.size ?: 0
+    }
+
 }
