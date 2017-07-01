@@ -2,11 +2,18 @@ Chicken-Soup
 
 This app is not just for fun. It will give you energy!!
 
+build:
+1. clone it
+2. import it to Android Studio(the first time need much time)
+
+
 ### TODO:
 
 1. Feature: one bow of chicken-soup ervery day
 2. Feature:  statistics(now just save to Sharepreferences)
-3. connect own server to save data
+3. connect own server to save data >> ok
 4. Feature: group
 5. Feature: Card View
+6. Feature: show foot mark in weixin
+7. bug: keyboard
  
