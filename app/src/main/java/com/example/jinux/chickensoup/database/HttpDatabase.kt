@@ -36,14 +36,15 @@ class HttpDataBase(val context: Context) {
         return PROTOCAL + host + path
     }
 
-    fun saveTodaySum(newScore: Int) {
-        val urlStr = String.format(generateURL(POST_AMOUNT_OF_USER), "pop-up", generateUserId(context))
+    fun saveTodaySum(action: String, newScore: Int, onSuccessCall: () -> Unit) {
+        val urlStr = String.format(generateURL(POST_AMOUNT_OF_USER), action, generateUserId(context))
         logD("saveTodaySum: " + urlStr)
         Http.post {
             url = urlStr
             raw = Gson().toJson(NewScore(newScore))
             onSuccess {
                 logD("post result = ${String(it)}")
+                onSuccessCall()
             }
             onFail {
                 logD("post result = $it")
@@ -51,14 +52,15 @@ class HttpDataBase(val context: Context) {
         }
     }
 
-    fun getTodaySum(callBack: (sum: Int) -> Unit): Unit {
-        val urlStr = String.format(generateURL(GET_AMOUNT_AT_SOMEDAY), "pop-up", formatToday(context.getString(R.string.data_fmt)))
+    fun getTodaySum(action: String, callBack: (sum: Int) -> Unit): Unit {
+        val urlStr = String.format(generateURL(GET_AMOUNT_AT_SOMEDAY), action, formatToday(context.getString(R.string.data_fmt)))
         logD("getTodaySum: " + urlStr)
         Http.get {
             url = urlStr
             onSuccess {
                 val jsonStr = String(it)
                 val json = Gson().fromJson<TodaySumResult>(jsonStr, TodaySumResult::class.java)
+                logD("json = " + json.toString())
                 callBack(json.data)
             }
 
@@ -68,14 +70,15 @@ class HttpDataBase(val context: Context) {
         }
     }
 
-    fun getTodayRecords(callBack: (sum: List<TodayRecord>) -> Unit): Unit {
-        val urlStr = String.format(generateURL(GET_LIST_OF_SOMEDAY), "pop-up", formatToday(context.getString(R.string.data_fmt)))
+    fun getTodayRecords(action: String, callBack: (sum: List<TodayRecord>) -> Unit): Unit {
+        val urlStr = String.format(generateURL(GET_LIST_OF_SOMEDAY), action, formatToday(context.getString(R.string.data_fmt)))
         logD("getTodayRecords: " + urlStr)
         Http.get {
             url = urlStr
             onSuccess {
                 val jsonStr = String(it)
                 val json = Gson().fromJson<TodayRecordsResult>(jsonStr, TodayRecordsResult::class.java)
+                logD("result = " + json.toString())
                 callBack(json.data)
             }
 

@@ -47,7 +47,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                             resources.getStringArray(com.example.jinux.chickensoup.R.array.action))
                     onItemSelectedListener {
                         onItemSelected { parent, view, p, id ->
-                            toast("Hello" + selectedItem)
+                            mMainPresenter.changeAction(adapter.getItem(p) as String)
                         }
                     }
                 }
