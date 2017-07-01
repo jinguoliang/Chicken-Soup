@@ -26,7 +26,13 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     lateinit private var  mRecords: ListView
 
+    lateinit private var mtoast: (msgRes: Int) -> Unit
+
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
+        mtoast = {
+            longToast(it)
+        }
+
         verticalLayout {
             padding = dip(10)
             gravity = Gravity.CENTER_HORIZONTAL
@@ -109,14 +115,24 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                 }
             }
 
-            button {
-                text = "分享"
-                onClick {
-                    mMainPresenter.onShareClick()
+            linearLayout {
+                button {
+                    text = context.getString(R.string.ok)
+                    onClick {
+                        mMainPresenter.onOkClick()
+                    }
+                }
+
+                button {
+                    text = context.getString(R.string.share)
+                    onClick {
+                        mMainPresenter.onShareClick()
+                    }
                 }
             }.lparams {
                 topMargin = dip(30)
             }
+
 
             // records
             mRecords = listView {
@@ -136,10 +152,6 @@ class MainActivityUI : AnkoComponent<MainActivity> {
         mMainPresenter = mainPresenter
     }
 
-    fun getAction(): String {
-        return mActionSpin.selectedItem.toString()
-    }
-
     fun setBaseScore(base: Int) {
         mBaseScoreEt.text = base.toString()
     }
@@ -155,6 +167,10 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     fun updateRecords(data: List<RecordItem>) {
         mRecords.adapter = RecordListAdapter(data)
+    }
+
+    fun showWarnNewScoreTooSmall() {
+        mtoast(R.string.warn_new_score_too_small)
     }
 }
 

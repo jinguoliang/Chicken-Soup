@@ -34,16 +34,18 @@ class MainPresenter(val mContext: MainActivity) {
         updateSumScore()
     }
 
-    fun onShareClick() {
-        mDatabase.saveTodaySum(mAction, mNewScore) {
-            pullTodayRecords()
-        }
 
-        if (mSumScore >= 100 || mNewScore >= 60) {
-            mView.showChicken(com.example.jinux.chickensoup.data.CHICKEN[((Math.random() * com.example.jinux.chickensoup.data.CHICKEN.size).toInt())])
-        } else {
-            mView.hideChicken()
+    fun onOkClick() {
+        if (mNewScore < 10) {
+            mView.showWarnNewScoreTooSmall()
+            return
         }
+        commitNewScore()
+        giveSomeChicken()
+    }
+
+    fun onShareClick() {
+        onOkClick()
 
         val msg = "$mAction: $mSumScore = $mBaseScore + $mNewScore"
         val intent = android.content.Intent(android.content.Intent.ACTION_SEND)
@@ -75,6 +77,19 @@ class MainPresenter(val mContext: MainActivity) {
         }
     }
 
+    private fun commitNewScore() {
+        mDatabase.saveTodaySum(mAction, mNewScore) {
+            pullTodayRecords()
+        }
+    }
+
+    private fun giveSomeChicken() {
+        if (mSumScore >= 100 || mNewScore >= 60) {
+            mView.showChicken(com.example.jinux.chickensoup.data.CHICKEN[((Math.random() * com.example.jinux.chickensoup.data.CHICKEN.size).toInt())])
+        } else {
+            mView.hideChicken()
+        }
+    }
 }
 
 data class RecordItem(val who: String, val action: String, val amount: Int, val time: String)

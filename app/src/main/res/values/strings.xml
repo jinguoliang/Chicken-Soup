@@ -4,4 +4,7 @@
     <string name="edit_default_value">0</string>
     <string name="site_up">仰卧起坐</string>
     <string name="data_fmt">yyyy-MM-dd</string>
+    <string name="share">分享</string>
+    <string name="ok">成了</string>
+    <string name="warn_new_score_too_small">做的太少，我都不好意思提到服务器</string>
 </resources>
