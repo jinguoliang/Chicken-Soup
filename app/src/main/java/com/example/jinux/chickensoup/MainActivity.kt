@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         ui.setContentView(this)
 
         MainPresenter(this).attachView(ui)
+
+        logD("JIN","md5 = " + generateUserId(this))
     }
 }
 
@@ -164,8 +166,8 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 }
 
 class MainPresenter(val mContext: MainActivity) {
-    private val mDatabase = FakeDataBase(mContext)
-    private var mBaseScore: Int = mDatabase.getTodaySum()
+    private val mDatabase = HttpDataBase(mContext)
+    private var mBaseScore: Int = 0
     private var mNewScore: Int = 0
     private var mSumScore: Int = 0
 
@@ -186,7 +188,7 @@ class MainPresenter(val mContext: MainActivity) {
     }
 
     fun onShareClick() {
-        mDatabase.saveTodaySum(mSumScore)
+        mDatabase.saveTodaySum(mNewScore)
 
         if (mSumScore >= 100 || mNewScore >= 60) {
             mView.showChicken(CHICKEN[((Math.random() * CHICKEN.size).toInt())])
@@ -208,7 +210,11 @@ class MainPresenter(val mContext: MainActivity) {
     fun attachView(view: MainActivityUI) {
         mView = view
         mView.setPresenter(this)
-        mView.setBaseScore(mBaseScore)
+
+        mDatabase.getTodaySum {
+            mBaseScore = it
+            mView.setBaseScore(mBaseScore)
+        }
     }
 
 }
