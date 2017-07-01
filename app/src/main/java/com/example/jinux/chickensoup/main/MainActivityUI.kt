@@ -5,7 +5,10 @@ import android.text.InputType
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Spinner
+import android.widget.TextView
 import com.example.jinux.chickensoup.data.TodayRecord
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -43,7 +46,9 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                     adapter = ArrayAdapter<String>(ui.ctx, android.R.layout.simple_list_item_1,
                             resources.getStringArray(com.example.jinux.chickensoup.R.array.action))
                     onItemSelectedListener {
-                        toast("Hello" + selectedItem)
+                        onItemSelected { parent, view, p, id ->
+                            toast("Hello" + selectedItem)
+                        }
                     }
                 }
                 mSumScoreTv = textView {

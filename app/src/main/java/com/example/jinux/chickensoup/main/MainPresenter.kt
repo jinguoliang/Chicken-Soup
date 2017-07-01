@@ -1,7 +1,6 @@
 package com.example.jinux.chickensoup.main
 
 import com.example.jinux.chickensoup.database.HttpDataBase
-import com.example.jinux.chickensoup.utils.logD
 import org.jetbrains.anko.ctx
 
 class MainPresenter(val mContext: MainActivity) {
