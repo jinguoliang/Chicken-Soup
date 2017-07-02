@@ -1,5 +1,6 @@
 package com.example.jinux.chickensoup.main
 
+import com.example.jinux.chickensoup.data.CHICKEN
 import com.example.jinux.chickensoup.database.HttpDataBase
 import org.jetbrains.anko.ctx
 
@@ -66,7 +67,7 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it.map { RecordItem(it.user_id, it.category, it.amount, it.created_time) })
+            mView.updateRecords(it.map { RecordItem(it.user_id.substring(0..5), it.category, it.amount, it.created_time) })
         }
     }
 
@@ -85,7 +86,7 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun giveSomeChicken() {
         if (mSumScore >= 100 || mNewScore >= 60) {
-            mView.showChicken(com.example.jinux.chickensoup.data.CHICKEN[((Math.random() * com.example.jinux.chickensoup.data.CHICKEN.size).toInt())])
+            mView.showChicken(CHICKEN[((Math.random() * CHICKEN.size).toInt())])
         } else {
             mView.hideChicken()
         }
