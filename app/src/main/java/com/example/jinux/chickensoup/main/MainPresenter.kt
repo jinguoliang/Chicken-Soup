@@ -1,5 +1,6 @@
 package com.example.jinux.chickensoup.main
 
+import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.data.CHICKEN
 import com.example.jinux.chickensoup.database.HttpDataBase
 import org.jetbrains.anko.ctx
@@ -67,13 +68,13 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it.map { RecordItem(it.user_id.substring(0..5), it.category, it.amount, it.created_time) })
+            mView.updateRecords(it.map { RecordItem(it.user.username ?: it.user.uid ?: it.user_id, it.category, it.amount, it.created_time) })
         }
     }
 
     private fun pullTodaySum() {
-        mDatabase.getTodaySum(mAction) {
-            mBaseScore = it
+        mDatabase.getTodaySum(mAction) { sum ->
+            mBaseScore = sum
             mView.setBaseScore(mBaseScore)
         }
     }
@@ -90,6 +91,10 @@ class MainPresenter(val mContext: MainActivity) {
         } else {
             mView.hideChicken()
         }
+    }
+
+    fun changeNick(nick: String) {
+        mDatabase.changeNick(nick)
     }
 }
 

@@ -2,12 +2,14 @@ package com.example.jinux.chickensoup.main
 
 import android.text.Editable
 import android.text.InputType
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -28,6 +30,10 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     lateinit private var mtoast: (msgRes: Int) -> Unit
 
+    lateinit private var  mNick: EditText
+
+    private var mNickBack: Editable? = null
+
     override fun createView(ui: AnkoContext<MainActivity>) = with(ui) {
         mtoast = {
             longToast(it)
@@ -37,6 +43,41 @@ class MainActivityUI : AnkoComponent<MainActivity> {
             padding = dip(10)
             gravity = Gravity.CENTER_HORIZONTAL
 
+            linearLayout {
+                mNick = editText {
+                    hint = "昵称"
+                    isEnabled = false
+                }.lparams {
+                    width = dip(200)
+                }
+                button {
+                    text = "编辑"
+                    onClick {
+                        if (mNick.isEnabled) {
+                            mNick.isEnabled = false
+                            if (TextUtils.isEmpty(mNick.text)) {
+                                mNick.text = mNickBack
+                            } else {
+                                mMainPresenter.changeNick(mNick.text.toString())
+                            }
+                        } else {
+                            mNickBack = mNick.text
+                            mNick.isEnabled = true
+                        }
+                    }
+                }
+                view {
+                }.lparams {
+                    weight = 1f
+                }
+                if (BuildConfig.DEBUG) {
+                    textView {
+                        text = "Debug"
+                    }
+                }
+            }.lparams {
+                height = dip(50)
+            }
 
             mSoupTv = textView {
                 textSize = 25f
@@ -171,6 +212,10 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     fun showWarnNewScoreTooSmall() {
         mtoast(R.string.warn_new_score_too_small)
+    }
+
+    fun setNickName(name: String) {
+        mNick.setText(name)
     }
 }
 

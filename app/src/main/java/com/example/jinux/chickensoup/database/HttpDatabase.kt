@@ -3,10 +3,7 @@ package com.example.jinux.chickensoup.database
 import android.content.Context
 import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
-import com.example.jinux.chickensoup.data.NewScore
-import com.example.jinux.chickensoup.data.TodayRecord
-import com.example.jinux.chickensoup.data.TodayRecordsResult
-import com.example.jinux.chickensoup.data.TodaySumResult
+import com.example.jinux.chickensoup.data.*
 import com.example.jinux.chickensoup.utils.formatToday
 import com.example.jinux.chickensoup.utils.generateUserId
 import com.example.jinux.chickensoup.utils.logD
@@ -29,6 +26,7 @@ class HttpDataBase(val context: Context) {
     private val POST_AMOUNT_OF_USER = "/soup/api/categories/%s/users/%s/amounts/"
     private val GET_AMOUNT_AT_SOMEDAY = "/soup/api/categories/%s/amounts/%s/"
     private val GET_LIST_OF_SOMEDAY = "/soup/api/categories/%s/amounts/%s/records/"
+    private val POST_NICK_NAME = "/soup/api/users/%s/"
 
     private val host = if (BuildConfig.DEBUG) HOST_DEBUG else HOST_RELEASE
 
@@ -84,6 +82,18 @@ class HttpDataBase(val context: Context) {
 
             onFail {
                 logD("get result = $it")
+            }
+        }
+    }
+
+    fun changeNick(nick: String) {
+        val urlStr = String.format(generateURL(POST_NICK_NAME), generateUserId(context))
+        logD("changeNick: " + urlStr)
+        Http.put {
+            url = urlStr
+            raw = Gson().toJson(NickName(nick))
+            onSuccess {
+                logD("changeNick successful")
             }
         }
     }
