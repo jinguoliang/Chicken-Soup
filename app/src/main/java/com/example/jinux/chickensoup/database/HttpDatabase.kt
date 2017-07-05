@@ -97,4 +97,19 @@ class HttpDataBase(val context: Context) {
             }
         }
     }
+
+    fun getNickName(callBack: (name: String) -> Unit): Unit {
+        val urlStr = String.format(generateURL(POST_NICK_NAME), generateUserId(context))
+        logD("getNickName: " + urlStr)
+        Http.get {
+            url = urlStr
+            onSuccess {
+                val str = String(it)
+                logD("getNickName")
+                val result = Gson().fromJson<UserResult>(str, UserResult::class.java)
+                callBack(result.data.username ?: result.data.uid)
+                logD("changeNick successful")
+            }
+        }
+    }
 }

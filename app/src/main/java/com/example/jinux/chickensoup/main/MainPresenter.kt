@@ -62,13 +62,20 @@ class MainPresenter(val mContext: MainActivity) {
         mView = view
         mView.setPresenter(this)
 
+        pullNickName()
         pullTodaySum()
         pullTodayRecords()
     }
 
+    private fun pullNickName() {
+        mDatabase.getNickName {
+            mView.setNickName(it)
+        }
+    }
+
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it.map { RecordItem(it.user.username ?: it.user.uid ?: it.user_id, it.category, it.amount, it.created_time) })
+            mView.updateRecords(it.map { RecordItem(it.user.username ?: it.user.uid, it.category, it.amount, it.created_time) })
         }
     }
 
