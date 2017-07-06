@@ -29,13 +29,19 @@ android {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "CURRENT_REVISION", "\"${getCurrentRevision()}\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.releaseConfig
+            buildConfigField "String", "CURRENT_REVISION", "\"${getCurrentRevision()}\""
         }
     }
+}
+
+def getCurrentRevision() {
+    return "git rev-parse HEAD".execute().getText().toString().trim()
 }
 
 dependencies {

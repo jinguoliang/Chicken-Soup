@@ -16,9 +16,6 @@ import com.ohmerhe.kolley.request.Http
  * it is a database with web server as backend
  */
 class HttpDataBase(val context: Context) {
-    init {
-        Http.init(context)
-    }
 
     private val PROTOCAL = "http://"
     private val HOST_RELEASE = "118.89.39.72"

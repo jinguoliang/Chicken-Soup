@@ -7,4 +7,5 @@
     <string name="share">分享</string>
     <string name="ok">成了</string>
     <string name="warn_new_score_too_small">做的太少，我都不好意思提到服务器</string>
+    <string name="has_update">Update</string>
 </resources>

@@ -19,3 +19,6 @@ data class TodayRecord(val category: String,
 data class UserResult(val data: User)
 data class TodayRecordsResult(val data: List<TodayRecord>)
 data class NickName(val username: String)
+
+data class GitObject(val sha: String)
+data class GithubCurrentRevicsionResult(val `object`: GitObject)

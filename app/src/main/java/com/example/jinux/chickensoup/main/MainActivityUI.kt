@@ -1,5 +1,6 @@
 package com.example.jinux.chickensoup.main
 
+import android.graphics.Color
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
+import com.example.jinux.chickensoup.network.getCommitId
+import com.example.jinux.chickensoup.utils.logD
 import org.jetbrains.anko.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
@@ -42,6 +45,19 @@ class MainActivityUI : AnkoComponent<MainActivity> {
         verticalLayout {
             padding = dip(10)
             gravity = Gravity.CENTER_HORIZONTAL
+
+            textView {
+                text = context.getString(R.string.has_update)
+                backgroundColor = Color.GREEN
+                visibility = View.GONE
+                getCommitId("master") {
+                    logD("remote $it")
+                    logD("local ${BuildConfig.CURRENT_REVISION}")
+                    if (!TextUtils.equals(it, BuildConfig.CURRENT_REVISION)) {
+                        visibility = View.VISIBLE
+                    }
+                }
+            }
 
             linearLayout {
                 mNick = editText {
