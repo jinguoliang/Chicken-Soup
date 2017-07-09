@@ -30,6 +30,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "CURRENT_REVISION", "\"${getCurrentRevision()}\""
+            applicationIdSuffix "debug"
         }
         release {
             minifyEnabled false
@@ -57,4 +58,6 @@ dependencies {
     implementation 'com.ohmerhe.kolley:kolley:0.3.0'
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation 'com.android.support:cardview-v7:26.0.0-beta2'
+    implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
 }

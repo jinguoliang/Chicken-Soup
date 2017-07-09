@@ -1,6 +1,7 @@
 package com.example.jinux.chickensoup.main
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -15,6 +16,8 @@ import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.network.getCommitId
 import com.example.jinux.chickensoup.utils.logD
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.tintedButton
+import org.jetbrains.anko.cardview.v7.cardView
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onItemSelectedListener
 
@@ -29,11 +32,11 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
     lateinit private var mBaseScoreEt: TextView
 
-    lateinit private var  mRecords: ListView
+    lateinit private var mRecords: ListView
 
     lateinit private var mtoast: (msgRes: Int) -> Unit
 
-    lateinit private var  mNick: EditText
+    lateinit private var mNick: EditText
 
     private var mNickBack: Editable? = null
 
@@ -46,64 +49,34 @@ class MainActivityUI : AnkoComponent<MainActivity> {
             padding = dip(10)
             gravity = Gravity.CENTER_HORIZONTAL
 
-            textView {
-                text = context.getString(R.string.has_update)
-                backgroundColor = Color.GREEN
-                visibility = View.GONE
-                getCommitId("master") {
-                    logD("remote $it")
-                    logD("local ${BuildConfig.CURRENT_REVISION}")
-                    if (!TextUtils.equals(it, BuildConfig.CURRENT_REVISION)) {
-                        visibility = View.VISIBLE
-                    }
-                }
-            }
-
             linearLayout {
-                mNick = editText {
-                    hint = "昵称"
-                    isEnabled = false
-                }.lparams {
-                    width = dip(200)
-                }
-                button {
-                    text = "编辑"
-                    onClick {
-                        if (mNick.isEnabled) {
-                            mNick.isEnabled = false
-                            if (TextUtils.isEmpty(mNick.text)) {
-                                mNick.text = mNickBack
-                            } else {
-                                mMainPresenter.changeNick(mNick.text.toString())
-                            }
-                        } else {
-                            mNickBack = mNick.text
-                            mNick.isEnabled = true
+                backgroundColor = Color.GREEN
+                textView {
+                    text = context.getString(R.string.has_update)
+                    visibility = View.GONE
+                    getCommitId("master") {
+                        logD("remote $it")
+                        logD("local ${BuildConfig.CURRENT_REVISION}")
+                        if (!TextUtils.equals(it, BuildConfig.CURRENT_REVISION)) {
+                            visibility = View.VISIBLE
                         }
                     }
                 }
+
                 view {
+                    backgroundColor = ctx.getColor(R.color.colorAccent)
                 }.lparams {
                     weight = 1f
+                    height = 0
                 }
                 if (BuildConfig.DEBUG) {
                     textView {
                         text = "Debug"
                     }
                 }
-            }.lparams {
-                height = dip(50)
             }
 
-            mSoupTv = textView {
-                textSize = 25f
-                visibility = View.INVISIBLE
-            }.lparams {
-                bottomMargin = dip(30)
-            }
-
-            val scoreLine = linearLayout {
-                id = android.R.id.text1
+            cardView {
                 mActionSpin = spinner {
                     adapter = ArrayAdapter<String>(ui.ctx, android.R.layout.simple_list_item_1,
                             resources.getStringArray(com.example.jinux.chickensoup.R.array.action))
@@ -113,89 +86,175 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                         }
                     }
                 }
-                mSumScoreTv = textView {
-                    hint = "总成绩"
-                    text = "0"
-                    gravity = Gravity.CENTER
+                cardElevation = 0f
+                cardBackgroundColor = ctx.getColorStateList(R.color.colorPrimary)
+                post {
+                    radius = (height / 2).toFloat()
                 }
-                textView {
-                    text = " = "
-                }
-                mBaseScoreEt = textView {
-                    hint = "基数"
-                    text = "0"
-                    gravity = Gravity.CENTER
-                    inputType = InputType.TYPE_CLASS_NUMBER
-                    setSelectAllOnFocus(true)
-                    addTextChangedListener(object : TextWatcher {
-                        override fun afterTextChanged(s: Editable?) {
-                            if (s == null || s.isEmpty()) {
-                                return
+            }.lparams {
+                width = wrapContent
+                topMargin = dip(5)
+            }
+            cardView {
+                linearLayout {
+                    padding = dip(10)
+                    mNick = editText {
+                        hint = "昵称"
+                        isEnabled = false
+                        singleLine = true
+                        ellipsize = TextUtils.TruncateAt.END
+                    }.lparams {
+                        width = dip(100)
+                    }
+                    button {
+                        backgroundResource = R.mipmap.icon_edit
+                        backgroundTintList = ctx.getColorStateList(R.color.button_tint_selector)
+                        onClick {
+                            if (mNick.isEnabled) {
+                                mNick.isEnabled = false
+                                if (TextUtils.isEmpty(mNick.text)) {
+                                    mNick.text = mNickBack
+                                } else {
+                                    mMainPresenter.changeNick(mNick.text.toString())
+                                }
+                            } else {
+                                mNickBack = mNick.text
+                                mNick.isEnabled = true
                             }
-
-                            mMainPresenter.onBaseEditChanged(s.toString().toInt())
                         }
+                    }.lparams {
+                        width = dip(40)
+                        height = dip(40)
+                        leftMargin = dip(8)
+                    }
+                    view {
+                    }.lparams {
+                        weight = 1f
+                        height = 0
+                    }
 
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        }
-
-                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        }
-
-                    })
                 }
-                textView {
-                    text = " + "
-                }
-                editText {
-                    hint = "新成绩"
-                    gravity = Gravity.CENTER
-                    setText(context.getString(com.example.jinux.chickensoup.R.string.edit_default_value))
-                    setSelectAllOnFocus(true)
-                    inputType = InputType.TYPE_CLASS_NUMBER
-                    addTextChangedListener(object : TextWatcher {
-                        override fun afterTextChanged(s: Editable?) {
-                            if (s == null || s.isEmpty()) {
-                                return
-                            }
-
-                            mMainPresenter.onNewScoreEditChanged(s.toString().toInt())
-                        }
-
-                        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        }
-
-                        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        }
-
-                    })
-                }
+            }.lparams {
+                margin = dip(10)
+                bottomMargin = 0
+            }
+            mSoupTv = textView {
+                textSize = 25f
+                visibility = View.GONE
+            }.lparams {
+                bottomMargin = dip(30)
             }
 
-            linearLayout {
-                button {
-                    text = context.getString(R.string.ok)
-                    onClick {
-                        mMainPresenter.onOkClick()
-                    }
-                }
+            cardView {
+                frameLayout {
+                    val scoreLine = linearLayout {
+                        id = android.R.id.text1
+                        padding = dip(4)
+                        mBaseScoreEt = textView {
+                            text = "0"
+                            gravity = Gravity.CENTER
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                            setSelectAllOnFocus(true)
+                            textSize = 80f
+                            addTextChangedListener(object : TextWatcher {
+                                override fun afterTextChanged(s: Editable?) {
+                                    if (s == null || s.isEmpty()) {
+                                        return
+                                    }
 
-                button {
-                    text = context.getString(R.string.share)
-                    onClick {
-                        mMainPresenter.onShareClick()
+                                    mMainPresenter.onBaseEditChanged(s.toString().toInt())
+                                }
+
+                                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                                }
+
+                                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                }
+
+                            })
+                        }
+                        textView {
+                            text = " + "
+                            textSize = 25f
+                        }
+                        editText {
+                            hint = "新成绩"
+                            gravity = Gravity.CENTER
+                            setText(context.getString(com.example.jinux.chickensoup.R.string.edit_default_value))
+                            textSize = 25f
+                            setSelectAllOnFocus(true)
+                            inputType = InputType.TYPE_CLASS_NUMBER
+                            addTextChangedListener(object : TextWatcher {
+                                override fun afterTextChanged(s: Editable?) {
+                                    if (s == null || s.isEmpty()) {
+                                        return
+                                    }
+
+                                    mMainPresenter.onNewScoreEditChanged(s.toString().toInt())
+                                }
+
+                                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                                }
+
+                                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                }
+
+                            })
+                        }
+                        textView {
+                            textSize = 25f
+                            text = " = "
+                        }
+                        mSumScoreTv = textView {
+                            text = "0"
+                            textSize = 25f
+                            gravity = Gravity.CENTER
+                        }
+                    }.lparams {
+                        leftMargin = dip(15)
+                    }
+                    linearLayout {
+                        button {
+                            backgroundResource = R.mipmap.icon_record
+                            backgroundTintList = ctx.getColorStateList(R.color.button_tint_selector)
+                            onClick {
+                                mMainPresenter.onOkClick()
+                            }
+                        }.lparams {
+                            width = dip(40)
+                            height = dip(40)
+                            rightMargin = dip(10)
+                            topMargin = dip(10)
+                        }
+
+                        tintedButton {
+                            backgroundResource = R.mipmap.icon_share
+                            backgroundTintList = ctx.getColorStateList(R.color.button_tint_selector)
+                            onClick {
+                                mMainPresenter.onShareClick()
+                            }
+                        }.lparams {
+                            width = dip(40)
+                            height = dip(40)
+                            rightMargin = dip(12)
+                            topMargin = dip(10)
+                        }
+                    }.lparams {
+                        gravity = Gravity.RIGHT or Gravity.TOP
                     }
                 }
             }.lparams {
-                topMargin = dip(30)
+                margin = dip(10)
+                width = matchParent
             }
-
 
             // records
-            mRecords = listView {
+            cardView {
+                mRecords = listView {
+                }
             }.lparams {
                 height = matchParent
-                margin = dip(20)
+                margin = dip(10)
             }
 
         }
@@ -219,7 +278,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     }
 
     fun hideChicken() {
-        mSoupTv.visibility = View.INVISIBLE
+        mSoupTv.visibility = View.GONE
     }
 
     fun updateRecords(data: List<RecordItem>) {
