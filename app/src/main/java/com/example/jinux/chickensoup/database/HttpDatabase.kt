@@ -5,7 +5,7 @@ import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.data.*
 import com.example.jinux.chickensoup.utils.formatToday
-import com.example.jinux.chickensoup.utils.generateUserId
+import com.example.jinux.chickensoup.utils.getUserId
 import com.example.jinux.chickensoup.utils.logD
 import com.google.gson.Gson
 import com.ohmerhe.kolley.request.Http
@@ -32,7 +32,7 @@ class HttpDataBase(val context: Context) {
     }
 
     fun saveTodaySum(action: String, newScore: Int, onSuccessCall: () -> Unit) {
-        val urlStr = String.format(generateURL(POST_AMOUNT_OF_USER), action, generateUserId(context))
+        val urlStr = String.format(generateURL(POST_AMOUNT_OF_USER), action, getUserId())
         logD("saveTodaySum: " + urlStr)
         Http.post {
             url = urlStr
@@ -84,7 +84,7 @@ class HttpDataBase(val context: Context) {
     }
 
     fun changeNick(nick: String) {
-        val urlStr = String.format(generateURL(POST_NICK_NAME), generateUserId(context))
+        val urlStr = String.format(generateURL(POST_NICK_NAME), getUserId())
         logD("changeNick: " + urlStr)
         Http.put {
             url = urlStr
@@ -96,7 +96,7 @@ class HttpDataBase(val context: Context) {
     }
 
     fun getNickName(callBack: (name: String) -> Unit): Unit {
-        val urlStr = String.format(generateURL(POST_NICK_NAME), generateUserId(context))
+        val urlStr = String.format(generateURL(POST_NICK_NAME), getUserId())
         logD("getNickName: " + urlStr)
         Http.get {
             url = urlStr
