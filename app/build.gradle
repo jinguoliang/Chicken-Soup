@@ -61,3 +61,16 @@ dependencies {
     implementation 'com.android.support:cardview-v7:26.0.0-beta2'
     implementation "org.jetbrains.anko:anko-cardview-v7:$anko_version"
 }
+
+assemble {
+    doLast {
+        "rm ../release-*.apk".execute()
+        copy {
+            from 'build/outputs/apk/release/app-release.apk'
+            into "../"
+            rename {
+                "release-${getCurrentRevision()}.apk"
+            }
+        }
+    }
+}
