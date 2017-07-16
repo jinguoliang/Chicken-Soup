@@ -286,7 +286,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
     }
 
     fun updateRecords(data: List<RecordItem>) {
-        mRecords.adapter = RecordListAdapter(data)
+        mRecords.adapter = RecordListAdapter(data.reversed())
     }
 
     fun showWarnNewScoreTooSmall() {
