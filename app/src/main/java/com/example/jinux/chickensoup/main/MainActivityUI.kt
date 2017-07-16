@@ -1,7 +1,6 @@
 package com.example.jinux.chickensoup.main
 
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.text.Editable
 import android.text.InputType
 import android.text.TextUtils
@@ -14,6 +13,7 @@ import android.widget.*
 import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.network.getCommitId
+import com.example.jinux.chickensoup.utils.getUserId
 import com.example.jinux.chickensoup.utils.logD
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.tintedButton
@@ -123,8 +123,8 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                             }
                         }
                     }.lparams {
-                        width = dip(40)
-                        height = dip(40)
+                        width = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
+                        height = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
                         leftMargin = dip(8)
                     }
                     view {
@@ -221,8 +221,8 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                                 mMainPresenter.onOkClick()
                             }
                         }.lparams {
-                            width = dip(40)
-                            height = dip(40)
+                            width = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
+                            height = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
                             rightMargin = dip(10)
                             topMargin = dip(10)
                         }
@@ -234,8 +234,8 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                                 mMainPresenter.onShareClick()
                             }
                         }.lparams {
-                            width = dip(40)
-                            height = dip(40)
+                            width = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
+                            height = ctx.resources.getDimensionPixelSize(R.dimen.common_icon_size)
                             rightMargin = dip(12)
                             topMargin = dip(10)
                         }
@@ -251,9 +251,13 @@ class MainActivityUI : AnkoComponent<MainActivity> {
             // records
             cardView {
                 mRecords = listView {
+                    divider = null
                 }
+                radius = dip(7).toFloat()
+                setContentPadding(0, dip(11), 0, dip(11))
             }.lparams {
                 height = matchParent
+                width = matchParent
                 margin = dip(10)
             }
 
@@ -295,20 +299,34 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 }
 
 class RecordListAdapter(val data: List<RecordItem>) : BaseAdapter() {
+
     override fun getView(p: Int, v: View?, parent: ViewGroup?): View {
         val item = data[p]
 
         var view = v
         if (view == null) {
-            view = LayoutInflater.from(parent!!.context).inflate(R.layout.item_record_list, parent, false)
+            val resId = if (getItemViewType(p) == ITEM_SELF) R.layout.item_record_list_self else R.layout.item_record_list
+            view = LayoutInflater.from(parent!!.context).inflate(resId, parent, false)
         }
 
         view!!.findViewById<TextView>(R.id.userName).setText(item.who)
         view.findViewById<TextView>(R.id.time).text = "at ${item.time}"
-        view.findViewById<TextView>(R.id.action).text = item.action
-        view.findViewById<TextView>(R.id.amount).text = ": ${item.amount}"
+
+        val content = TextView(parent!!.context)
+        content.setText("我做了 ${item.amount} 个 ${item.action}")
+        content.setTextSize(12f)
+        val container = view.findViewById<FrameLayout>(R.id.container)
+        container.addView(content)
 
         return view
+    }
+
+    private val ITEM_SELF = 1
+    private val ITEM_OTHER = 2
+
+    override fun getItemViewType(position: Int): Int {
+        val isSelf = data[position].whoId == getUserId()
+        return if (isSelf) ITEM_SELF else ITEM_OTHER
     }
 
     override fun getItem(p: Int): Any {
@@ -320,7 +338,7 @@ class RecordListAdapter(val data: List<RecordItem>) : BaseAdapter() {
     }
 
     override fun getCount(): Int {
-        return data.size ?: 0
+        return data?.size
     }
 
 }

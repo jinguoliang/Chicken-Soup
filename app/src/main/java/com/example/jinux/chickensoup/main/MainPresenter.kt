@@ -1,13 +1,12 @@
 package com.example.jinux.chickensoup.main
 
-import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.data.CHICKEN
 import com.example.jinux.chickensoup.database.HttpDataBase
 import org.jetbrains.anko.ctx
 
 class MainPresenter(val mContext: MainActivity) {
 
-    private val  ACTION_PUSH_UP = "pop-up"
+    private val ACTION_PUSH_UP = "pop-up"
 
     private val mDatabase = HttpDataBase(mContext)
     private var mBaseScore: Int = 0
@@ -75,7 +74,12 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it.map { RecordItem(it.user.username ?: it.user.uid, it.category, it.amount, it.created_time) })
+            mView.updateRecords(it.map {
+                RecordItem(it.user_id,
+                        it.user.username ?: it.user.uid, it.category,
+                        it.amount,
+                        it.created_time)
+            })
         }
     }
 
@@ -87,6 +91,8 @@ class MainPresenter(val mContext: MainActivity) {
     }
 
     private fun commitNewScore() {
+        mBaseScore = mSumScore
+        mView.setBaseScore(mBaseScore)
         mDatabase.saveTodaySum(mAction, mNewScore) {
             pullTodayRecords()
         }
@@ -105,4 +111,4 @@ class MainPresenter(val mContext: MainActivity) {
     }
 }
 
-data class RecordItem(val who: String, val action: String, val amount: Int, val time: String)
+data class RecordItem(val whoId: String, val who: String, val action: String, val amount: Int, val time: String)

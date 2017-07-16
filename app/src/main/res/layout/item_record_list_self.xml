@@ -4,7 +4,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:paddingBottom="0dp">
+                android:paddingBottom="0dp"
+                android:layoutDirection="rtl">
 
     <android.support.v7.widget.CardView
         android:id="@+id/icon_cardview"
