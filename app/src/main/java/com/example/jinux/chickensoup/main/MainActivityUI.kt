@@ -12,9 +12,11 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.R
-import com.example.jinux.chickensoup.network.getCommitId
+import com.example.jinux.chickensoup.network.getBranchHead
+import com.example.jinux.chickensoup.network.getGithubUpdateRevision
 import com.example.jinux.chickensoup.utils.getUserId
 import com.example.jinux.chickensoup.utils.logD
+import com.example.jinux.chickensoup.utils.updateApp
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.tintedButton
 import org.jetbrains.anko.cardview.v7.cardView
@@ -51,14 +53,18 @@ class MainActivityUI : AnkoComponent<MainActivity> {
 
             linearLayout {
                 backgroundColor = Color.GREEN
-                textView {
+                button {
                     text = context.getString(R.string.has_update)
                     visibility = View.GONE
-                    getCommitId("master") {
-                        logD("remote $it")
+                    getGithubUpdateRevision { newRevision, updateRevision ->
+                        logD("remote $newRevision")
                         logD("local ${BuildConfig.CURRENT_REVISION}")
-                        if (!TextUtils.equals(it, BuildConfig.CURRENT_REVISION)) {
+                        if (!TextUtils.equals(newRevision, BuildConfig.CURRENT_REVISION)) {
                             visibility = View.VISIBLE
+                        }
+
+                        onClick {
+                            updateApp(updateRevision)
                         }
                     }
                 }

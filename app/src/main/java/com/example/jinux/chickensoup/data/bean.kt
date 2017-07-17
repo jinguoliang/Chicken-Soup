@@ -21,4 +21,6 @@ data class TodayRecordsResult(val data: List<TodayRecord>)
 data class NickName(val username: String)
 
 data class GitObject(val sha: String)
-data class GithubCurrentRevicsionResult(val `object`: GitObject)
+data class GithubBranchHeadResult(val `object`: GitObject)
+
+data class GithubCommitInfo(val sha: String, val parents: Array<GitObject>)

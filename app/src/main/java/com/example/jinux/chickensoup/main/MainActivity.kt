@@ -1,6 +1,5 @@
 package com.example.jinux.chickensoup.main
 
-import com.example.jinux.chickensoup.network.getCommitId
 import com.ohmerhe.kolley.request.Http
 import org.jetbrains.anko.*
 
