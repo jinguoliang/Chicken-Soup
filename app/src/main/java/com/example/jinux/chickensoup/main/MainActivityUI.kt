@@ -64,7 +64,7 @@ class MainActivityUI : AnkoComponent<MainActivity> {
                         }
 
                         onClick {
-                            updateApp(updateRevision)
+                            updateApp(newRevision)
                         }
                     }
                 }

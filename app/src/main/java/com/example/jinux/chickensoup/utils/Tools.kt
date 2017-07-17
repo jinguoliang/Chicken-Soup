@@ -2,6 +2,7 @@ package com.example.jinux.chickensoup.utils
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import com.example.jinux.chickensoup.BuildConfig
 import com.example.jinux.chickensoup.MAPP
 import com.example.jinux.chickensoup.data.TodaySumResult
@@ -36,11 +37,12 @@ fun downloadFile(urlString: String, callback: (String) -> Unit) {
     Http.get {
         url = urlString
         onSuccess { it
-            val saveFile = File("${MAPP.sInstance.cacheDir.absolutePath}/update.apk", "w")
+            val saveFile = File("${Environment.getExternalStorageDirectory().absolutePath}", "moveon_update.apk")
+            saveFile.createNewFile()
             val buffedOutput = BufferedOutputStream(FileOutputStream(saveFile))
             buffedOutput.write(it)
             buffedOutput.close()
-            saveFile.absolutePath
+            callback(saveFile.absolutePath)
         }
 
         onFail {
