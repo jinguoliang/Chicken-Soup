@@ -56,9 +56,9 @@ class MainPresenter(val mContext: Context) {
         mContext.ctx.startActivity(intent)
     }
 
-    lateinit private var mView: MainActivityUI
+    lateinit private var mView: TaskFragment
 
-    fun attachView(view: MainActivityUI) {
+    fun attachView(view: TaskFragment) {
         mView = view
 
         pullNickName()

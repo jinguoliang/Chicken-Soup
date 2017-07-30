@@ -3,4 +3,5 @@
     <dimen name="common_icon_size">20dp</dimen>
     <dimen name="head_icon_size">52dp</dimen>
     <dimen name="head_icon_size_half">26dp</dimen>
+    <dimen name="fab_margin">20dp</dimen>
 </resources>
