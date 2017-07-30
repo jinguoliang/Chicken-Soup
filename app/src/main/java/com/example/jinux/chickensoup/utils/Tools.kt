@@ -3,15 +3,11 @@ package com.example.jinux.chickensoup.utils
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import com.example.jinux.chickensoup.BuildConfig
-import com.example.jinux.chickensoup.MAPP
-import com.example.jinux.chickensoup.data.TodaySumResult
-import com.google.gson.Gson
+import com.example.jinux.chickensoup.App
 import com.ohmerhe.kolley.request.Http
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
 
 /**
  * Created by jinux on 17-7-16.
@@ -55,6 +51,6 @@ fun installLocalApk(path: String) {
     val intent = Intent(Intent.ACTION_VIEW);
     intent.setDataAndType(Uri.fromFile(File(path)), "application/vnd.android.package-archive");
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-    MAPP.sInstance.startActivity(intent);
+    App.sInstance.startActivity(intent);
 }
 

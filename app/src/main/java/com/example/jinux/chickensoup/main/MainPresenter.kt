@@ -1,10 +1,11 @@
 package com.example.jinux.chickensoup.main
 
+import android.content.Context
 import com.example.jinux.chickensoup.data.CHICKEN
 import com.example.jinux.chickensoup.database.HttpDataBase
 import org.jetbrains.anko.ctx
 
-class MainPresenter(val mContext: MainActivity) {
+class MainPresenter(val mContext: Context) {
 
     private val ACTION_PUSH_UP = "pop-up"
 
@@ -59,7 +60,6 @@ class MainPresenter(val mContext: MainActivity) {
 
     fun attachView(view: MainActivityUI) {
         mView = view
-        mView.setPresenter(this)
 
         pullNickName()
         pullTodaySum()
@@ -74,7 +74,7 @@ class MainPresenter(val mContext: MainActivity) {
 
     private fun pullTodayRecords() {
         mDatabase.getTodayRecords(mAction) {
-            mView.updateRecords(it.map {
+            mView.setTaskRecords(it.map {
                 RecordItem(it.user_id,
                         it.user.username ?: it.user.uid, it.category,
                         it.amount,
@@ -86,13 +86,13 @@ class MainPresenter(val mContext: MainActivity) {
     private fun pullTodaySum() {
         mDatabase.getTodaySum(mAction) { sum ->
             mBaseScore = sum
-            mView.setBaseScore(mBaseScore)
+            mView.setLastScore(mBaseScore)
         }
     }
 
     private fun commitNewScore() {
         mBaseScore = mSumScore
-        mView.setBaseScore(mBaseScore)
+        mView.setLastScore(mBaseScore)
         mDatabase.saveTodaySum(mAction, mNewScore) {
             pullTodayRecords()
         }

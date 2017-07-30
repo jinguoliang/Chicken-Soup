@@ -2,7 +2,7 @@ package com.example.jinux.chickensoup.utils
 
 import android.content.Context
 import android.telephony.TelephonyManager
-import com.example.jinux.chickensoup.MAPP
+import com.example.jinux.chickensoup.App
 
 
 /**
@@ -18,7 +18,7 @@ fun getUserId(): String {
         return userId as String
     }
 
-    val context = MAPP.sInstance
+    val context = App.sInstance
     val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     val id = tm.deviceId
     context.logD("deviceId: $id")
