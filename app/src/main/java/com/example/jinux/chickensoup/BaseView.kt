@@ -6,5 +6,5 @@ package com.example.jinux.chickensoup
  * MVP  -- V
  */
 interface BaseView <T>{
-    var mPresenter: T?
+    var mPresenter: T
 }
