@@ -15,7 +15,7 @@
         android:theme="@style/Base.AppTheme"
         android:name=".App"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".task.TaskActivity" android:theme="@style/AppTheme.OverlapSystemBar" android:launchMode="singleInstance">
+        <activity android:name=".TaskActivity" android:theme="@style/AppTheme.OverlapSystemBar" android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

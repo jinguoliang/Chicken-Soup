@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.main
+package com.example.jinux.chickensoup.task
 
 import android.view.LayoutInflater
 import android.view.View
@@ -49,7 +49,9 @@ class RecordListAdapter(val data: List<RecordItem>) : BaseAdapter() {
     }
 
     override fun getCount(): Int {
-        return data?.size
+        return data.size
     }
 
 }
+
+data class RecordItem(val whoId: String, val who: String, val action: String, val amount: Int, val time: String)

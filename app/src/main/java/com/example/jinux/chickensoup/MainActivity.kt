@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.task
+package com.example.jinux.chickensoup
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -8,12 +8,11 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.example.jinux.chickensoup.BaseActivity
-import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.database.HttpDataBase
-import com.example.jinux.chickensoup.main.TaskFragment
+import com.example.jinux.chickensoup.task.TaskFragment
+import com.example.jinux.chickensoup.task.TaskPresenter
 import com.ohmerhe.kolley.request.Http
-import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.toast
 
 /**
  * Created by jingu on 2017/7/30.
@@ -65,9 +64,14 @@ class TaskActivity() : BaseActivity() {
 
     private fun setupDrawerContent(navigationView: NavigationView) {
         navigationView.setNavigationItemSelectedListener { menuItem ->
-//            if (menuItem.itemId == R.id.statistics_navigation_menu_item) {
-//
-//            }
+            when (menuItem.itemId) {
+
+                R.id.list_navigation_menu_item -> {
+                    toast("record")
+                }
+
+            }
+
             // Close the navigation drawer when an item is selected.
             menuItem.isChecked = true
             drawerLayout.closeDrawers()

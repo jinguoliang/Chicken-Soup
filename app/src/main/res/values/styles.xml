@@ -5,7 +5,7 @@
 
     <style name="AppTheme.OverlapSystemBar" parent="Base.AppTheme" />
 
-    <style name="Base.AppTheme" parent="Theme.AppCompat.NoActionBar">
+    <style name="Base.AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>

@@ -1,7 +1,6 @@
 package com.example.jinux.chickensoup.task
 
 import com.example.jinux.chickensoup.database.HttpDataBase
-import com.example.jinux.chickensoup.main.RecordItem
 
 /**
  * Created by jingu on 2017/7/30.
