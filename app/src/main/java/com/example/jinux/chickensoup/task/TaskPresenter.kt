@@ -28,15 +28,8 @@ class TaskPresenter(val mDatabase: HttpDataBase, val mView: TaskContract.View, v
 
     override fun start() {
         mView.showLoadingView()
-        pullNickName()
         pullTodaySum()
         pullTodayRecords()
-    }
-
-    private fun pullNickName() {
-        mDatabase.getNickName {
-            mView.setNickName(it)
-        }
     }
 
     private fun pullTodayRecords() {

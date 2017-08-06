@@ -10,7 +10,6 @@ import com.example.jinux.chickensoup.BaseView
  */
 interface TaskContract {
     interface View : BaseView<Presenter> {
-        fun setNickName(name: String)
         fun setLastScore(score: Int)
         fun setTaskRecords(data: List<RecordItem>)
         fun showLoadingView()

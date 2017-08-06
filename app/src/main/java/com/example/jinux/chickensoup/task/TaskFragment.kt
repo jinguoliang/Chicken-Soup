@@ -8,17 +8,13 @@ import android.view.ViewGroup
 import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.database.HttpDataBase
 import com.example.jinux.chickensoup.utils.inflate
-import kotlinx.android.synthetic.main.fragment_act.*
+import kotlinx.android.synthetic.main.fragment_task.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.toast
 
 class TaskFragment : Fragment(), TaskContract.View {
 
     override lateinit var mPresenter: TaskContract.Presenter
-
-    private val mNickName by lazy {
-        nick_name
-    }
 
     private val mLoadingView by lazy {
         loading
@@ -58,11 +54,6 @@ class TaskFragment : Fragment(), TaskContract.View {
         toast(R.string.warn_new_score_too_small)
     }
 
-    override fun setNickName(name: String) {
-        hideLoadingView()
-        nick_name.setText(name)
-    }
-
     override fun setLastScore(score: Int) {
         hideLoadingView()
         base_score.text = score.toString()
@@ -89,7 +80,7 @@ class TaskFragment : Fragment(), TaskContract.View {
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return container?.inflate(R.layout.fragment_act)
+        return container?.inflate(R.layout.fragment_task)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,13 +90,6 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        edit_nick.onClick {
-            mNickName.isEnabled = !mNickName.isEnabled
-            if (!mNickName.isEnabled) {
-                mPresenter.changeNick(mNickName.text.toString())
-            }
-        }
 
         mRecordBtn.onClick {
             mPresenter.commit(new_score.text.toString().toIntOrNull()?:0)

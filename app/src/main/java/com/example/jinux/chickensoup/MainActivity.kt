@@ -6,9 +6,14 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
 import android.view.MenuItem
+import android.widget.ImageButton
+import android.widget.TextView
 import com.example.jinux.chickensoup.about.AboutFragment
+import com.example.jinux.chickensoup.database.HttpDataBase
 import com.example.jinux.chickensoup.task.TaskFragment
-import kotlinx.android.synthetic.main.task_act.*
+import kotlinx.android.synthetic.main.fragment_task.*
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.sdk25.coroutines.onClick
 
 /**
  * Created by jingu on 2017/7/30.
@@ -26,7 +31,7 @@ class TaskActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.task_act)
+        setContentView(R.layout.activity_main)
 
         // Set up the toolbar.
         setSupportActionBar(toolbar)
@@ -34,7 +39,6 @@ class TaskActivity : BaseActivity() {
             it.setHomeAsUpIndicator(R.mipmap.ic_launcher)
             it.setDisplayHomeAsUpEnabled(true)
         }
-
         // Set up the navigation drawer.
         drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark)
 
@@ -53,6 +57,22 @@ class TaskActivity : BaseActivity() {
     }
 
     private fun setupDrawerContent(navigationView: NavigationView) {
+        val dataBase = HttpDataBase(this)
+
+        navigationView.getHeaderView(0).apply {
+            val nickName = findViewById<TextView>(R.id.nick_name).apply {
+                dataBase.getNickName { name ->
+                    text = name
+                }
+            }
+            findViewById<ImageButton>(R.id.edit_nick).onClick {
+                nickName.isEnabled = !nickName.isEnabled
+                if (!nickName.isEnabled) {
+                    dataBase.changeNick(nickName.text.toString())
+                }
+            }
+        }
+
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
 
@@ -72,6 +92,7 @@ class TaskActivity : BaseActivity() {
         }
     }
 
+
     private fun showPage(pageId: Int) {
         val fragment = when (pageId) {
             0 -> {
@@ -83,6 +104,7 @@ class TaskActivity : BaseActivity() {
         }
         ActivityUtils.addFragmentToActivity(supportFragmentManager, fragment, R.id.contentFrame)
     }
+
 }
 
 /**
