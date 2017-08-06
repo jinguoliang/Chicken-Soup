@@ -5,14 +5,10 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.example.jinux.chickensoup.database.HttpDataBase
+import com.example.jinux.chickensoup.about.AboutFragment
 import com.example.jinux.chickensoup.task.TaskFragment
-import com.example.jinux.chickensoup.task.TaskPresenter
-import com.ohmerhe.kolley.request.Http
-import org.jetbrains.anko.toast
+import kotlinx.android.synthetic.main.task_act.*
 
 /**
  * Created by jingu on 2017/7/30.
@@ -20,16 +16,19 @@ import org.jetbrains.anko.toast
  * Activity 负责整合
  */
 
-class TaskActivity() : BaseActivity() {
+class TaskActivity : BaseActivity() {
+    val PAGE_RECORD = 0
+    val PAGE_ABOUT = 1
 
-    private lateinit var drawerLayout: DrawerLayout
+    private val drawerLayout by lazy {
+        drawer_layout
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.task_act)
 
         // Set up the toolbar.
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.let {
             it.setHomeAsUpIndicator(R.mipmap.ic_launcher)
@@ -37,20 +36,11 @@ class TaskActivity() : BaseActivity() {
         }
 
         // Set up the navigation drawer.
-        drawerLayout = (findViewById<DrawerLayout>(R.id.drawer_layout)).apply {
-            setStatusBarBackground(R.color.colorPrimaryDark)
-        }
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        setupDrawerContent(navigationView)
+        drawerLayout.setStatusBarBackground(R.color.colorPrimaryDark)
 
-        val tasksFragment = supportFragmentManager.findFragmentById(R.id.contentFrame)
-                as TaskFragment? ?: TaskFragment.newInstance().also {
-            ActivityUtils.addFragmentToActivity(
-                    supportFragmentManager, it, R.id.contentFrame)
-        }
+        setupDrawerContent(nav_view)
 
-        Http.init(this)
-        TaskPresenter(HttpDataBase(this), tasksFragment, "俯卧撑")
+        showPage(PAGE_RECORD)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -66,34 +56,50 @@ class TaskActivity() : BaseActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
 
-                R.id.list_navigation_menu_item -> {
-                    toast("record")
+                R.id.list_navigation_menu_item_record -> {
+                    showPage(PAGE_RECORD)
+                }
+
+                R.id.list_navigation_menu_item_about -> {
+                    showPage(PAGE_ABOUT)
                 }
 
             }
 
             // Close the navigation drawer when an item is selected.
-            menuItem.isChecked = true
             drawerLayout.closeDrawers()
             true
         }
     }
-}
-    /**
-     * This provides methods to help Activities load their UI.
-     */
-    object ActivityUtils {
 
-        /**
-         * The `fragment` is added to the container view with id `frameId`. The operation is
-         * performed by the `fragmentManager`.
-         */
-        fun addFragmentToActivity(fragmentManager: FragmentManager,
-                                  fragment: Fragment, frameId: Int) {
-            val transaction = fragmentManager.beginTransaction()
-            transaction.add(frameId, fragment)
-            transaction.commit()
+    private fun showPage(pageId: Int) {
+        val fragment = when (pageId) {
+            0 -> {
+                TaskFragment.newInstance()
+            }
+            else -> {
+                AboutFragment()
+            }
         }
-
+        ActivityUtils.addFragmentToActivity(supportFragmentManager, fragment, R.id.contentFrame)
     }
+}
+
+/**
+ * This provides methods to help Activities load their UI.
+ */
+object ActivityUtils {
+
+    /**
+     * The `fragment` is added to the container view with id `frameId`. The operation is
+     * performed by the `fragmentManager`.
+     */
+    fun addFragmentToActivity(fragmentManager: FragmentManager,
+                              fragment: Fragment, frameId: Int) {
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(frameId, fragment)
+        transaction.commit()
+    }
+
+}
 

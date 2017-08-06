@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.jinux.chickensoup.R
+import com.example.jinux.chickensoup.database.HttpDataBase
 import com.example.jinux.chickensoup.utils.inflate
 import kotlinx.android.synthetic.main.fragment_act.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -89,6 +90,11 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return container?.inflate(R.layout.fragment_act)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        TaskPresenter(HttpDataBase(context), this, "俯卧撑")
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
