@@ -2,6 +2,7 @@ package com.example.jinux.chickensoup.task
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +62,10 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     override fun setTaskRecords(data: List<RecordItem>) {
         hideLoadingView()
-        record_list.adapter = RecordListAdapter(data.reversed())
+        records_recycleview.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = RecordListAdapter(data.reversed())
+        }
     }
 
     override fun showLoadingView() {

@@ -11,7 +11,6 @@ import android.widget.TextView
 import com.example.jinux.chickensoup.about.AboutFragment
 import com.example.jinux.chickensoup.database.HttpDataBase
 import com.example.jinux.chickensoup.task.TaskFragment
-import kotlinx.android.synthetic.main.fragment_task.*
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 

@@ -72,11 +72,11 @@
             app:contentPadding="10dp"
             app:cardCornerRadius="5dp">
 
-            <ListView
-                android:id="@+id/record_list"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/records_recycleview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@null"></ListView>
+                android:divider="@null" />
         </android.support.v7.widget.CardView>
     </LinearLayout>
 
