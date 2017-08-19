@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.network
+package com.example.jinux.chickensoup.api.github
 
 import com.example.jinux.chickensoup.data.GithubBranchHeadResult
 import com.example.jinux.chickensoup.data.GithubCommitInfo

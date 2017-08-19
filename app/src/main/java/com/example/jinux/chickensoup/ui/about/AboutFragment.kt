@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.about
+package com.example.jinux.chickensoup.ui.about
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

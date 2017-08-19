@@ -8,9 +8,9 @@ import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.TextView
-import com.example.jinux.chickensoup.about.AboutFragment
-import com.example.jinux.chickensoup.database.HttpDataBase
-import com.example.jinux.chickensoup.task.TaskFragment
+import com.example.jinux.chickensoup.ui.about.AboutFragment
+import com.example.jinux.chickensoup.api.keep.HttpDataBase
+import com.example.jinux.chickensoup.ui.task.TaskFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 

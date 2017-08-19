@@ -1,7 +1,8 @@
-package com.example.jinux.chickensoup.task
+package com.example.jinux.chickensoup.ui.task
 
 import com.example.jinux.chickensoup.BasePresenter
 import com.example.jinux.chickensoup.BaseView
+import com.example.jinux.chickensoup.ui.vo.RecordItem
 
 /**
  * Created by jingu on 2017/7/30.

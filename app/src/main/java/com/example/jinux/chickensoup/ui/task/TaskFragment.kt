@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.task
+package com.example.jinux.chickensoup.ui.task
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.jinux.chickensoup.R
-import com.example.jinux.chickensoup.database.HttpDataBase
+import com.example.jinux.chickensoup.api.keep.HttpDataBase
+import com.example.jinux.chickensoup.ui.vo.RecordItem
+import com.example.jinux.chickensoup.ui.task.adapter.RecordListAdapter
 import com.example.jinux.chickensoup.utils.inflate
 import kotlinx.android.synthetic.main.fragment_task.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -31,6 +33,16 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     private val mNewScore by lazy {
         new_score
+    }
+
+    private val mRecordList by lazy {
+        records_recycleview.apply {
+        layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private val  mBaseScore by lazy {
+        base_score
     }
 
     private fun onNewScoreEditChanged(newScore: Int) {
@@ -57,13 +69,12 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     override fun setLastScore(score: Int) {
         hideLoadingView()
-        base_score.text = score.toString()
+        mBaseScore.text = score.toString()
     }
 
     override fun setTaskRecords(data: List<RecordItem>) {
         hideLoadingView()
-        records_recycleview.apply {
-            layoutManager = LinearLayoutManager(context)
+        mRecordList.apply {
             adapter = RecordListAdapter(data.reversed())
         }
     }
@@ -80,7 +91,7 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     override fun setLoadError() {
         showLoadingView()
-        loading.text = "error"
+        mLoadingView.text = "error"
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

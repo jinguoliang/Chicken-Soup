@@ -1,4 +1,4 @@
-package com.example.jinux.chickensoup.task
+package com.example.jinux.chickensoup.ui.task.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
