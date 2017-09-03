@@ -18,8 +18,8 @@ import com.ohmerhe.kolley.request.Http
 class HttpDataBase(val context: Context) {
 
     private val PROTOCAL = "http://"
-    private val HOST_RELEASE = "118.89.39.72"
-    private val HOST_DEBUG = "118.89.39.72:81"
+    private val HOST_RELEASE = "dev.soup.pysnow530.com"
+    private val HOST_DEBUG = "soup.pysnow530.com"
     private val POST_AMOUNT_OF_USER = "/soup/api/categories/%s/users/%s/amounts/"
     private val GET_AMOUNT_AT_SOMEDAY = "/soup/api/categories/%s/amounts/%s/"
     private val GET_LIST_OF_SOMEDAY = "/soup/api/categories/%s/amounts/%s/records/"
