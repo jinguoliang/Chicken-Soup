@@ -14,6 +14,7 @@ import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.utils.BitmapLoader
 import com.example.jinux.chickensoup.utils.inflate
 import com.example.jinux.chickensoup.utils.logD
+import com.example.jinux.chickensoup.utils.toast
 import kotlinx.android.synthetic.main.video_list.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onPrepared
@@ -119,6 +120,11 @@ class VideoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         coverView.tag = data["cover"]!!
         BitmapLoader.load(coverView.tag as String) { k, v ->
+            if (v == null) {
+                toast("no bitmap")
+                return@load
+            }
+
             coverView.post {
                 if (k == coverView.tag) {
                     coverView.setImageBitmap(v)
