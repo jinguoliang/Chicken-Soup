@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.video_list.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.sdk25.coroutines.onPrepared
 import org.json.JSONArray
+import java.net.URLDecoder
 import java.util.*
 
 
@@ -46,8 +47,10 @@ class VideoFragment : Fragment() {
                     val info = it.getJSONObject(i)
                     val map = mutableMapOf<String, String>()
                     map.put("video", info.getString("video").replace("\\", "").replace("\"", ""))
-                    map.put("cover", "image:(.*\\.(pn|jp|jpe)g)".toRegex().find(info.getString("ext"))
-                            ?.groupValues?.get(1)?.replace("\\\\\\", "")?.replace("https", "http") ?: "")
+                    map.put("cover", "src=(http%3A%2F%2F.*\\.(pn|jp|jpe)g)".toRegex().find
+                    (info.getString("ext"))
+                            ?.groupValues?.get(1) ?: "")
+                    map.put("cover", URLDecoder.decode(map.get("cover")))
                     map.put("title", info.getString("title")
                             .replace("\\\"", "").replace("\\n", "").replace("\\\\", "\\"))
                     map.put("duration", info.getString("duration").replace("\\", "").replace("\"", ""))
