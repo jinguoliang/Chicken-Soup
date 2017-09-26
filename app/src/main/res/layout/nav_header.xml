@@ -33,7 +33,6 @@
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
         android:layout_toEndOf="@id/nick_name"
-        android:layout_alignBottom="@id/nick_name"
-        android:tint="@color/button_tint_selector" />
+        android:layout_alignBottom="@id/nick_name" />
 
 </RelativeLayout>

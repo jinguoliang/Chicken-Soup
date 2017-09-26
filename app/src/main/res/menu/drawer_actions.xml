@@ -9,12 +9,15 @@
         <item
             android:id="@+id/list_navigation_menu_item_record"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/app_name" />
-
+            android:title="@string/app_name"/>
+        <item
+            android:id="@+id/list_navigation_menu_item_video_list"
+            android:icon="@mipmap/ic_launcher"
+            android:title="@string/video_list"/>
         <item
             android:id="@+id/list_navigation_menu_item_about"
             android:icon="@mipmap/ic_launcher"
-            android:title="@string/about" />
+            android:title="@string/about"/>
     </group>
 
 

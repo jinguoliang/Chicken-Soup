@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.jinux.chickensoup.R
 import com.example.jinux.chickensoup.api.keep.HttpDataBase
-import com.example.jinux.chickensoup.ui.vo.RecordItem
 import com.example.jinux.chickensoup.ui.task.adapter.RecordListAdapter
+import com.example.jinux.chickensoup.ui.vo.RecordItem
 import com.example.jinux.chickensoup.utils.inflate
 import kotlinx.android.synthetic.main.fragment_task.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
@@ -37,7 +37,7 @@ class TaskFragment : Fragment(), TaskContract.View {
 
     private val mRecordList by lazy {
         records_recycleview.apply {
-        layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context)
         }
     }
 

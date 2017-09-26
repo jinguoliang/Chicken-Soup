@@ -8,9 +8,10 @@ import android.support.v4.view.GravityCompat
 import android.view.MenuItem
 import android.widget.ImageButton
 import android.widget.TextView
-import com.example.jinux.chickensoup.ui.about.AboutFragment
 import com.example.jinux.chickensoup.api.keep.HttpDataBase
+import com.example.jinux.chickensoup.ui.about.AboutFragment
 import com.example.jinux.chickensoup.ui.task.TaskFragment
+import com.example.jinux.chickensoup.ui.video.VideoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.sdk25.coroutines.onClick
 
@@ -23,6 +24,7 @@ import org.jetbrains.anko.sdk25.coroutines.onClick
 class TaskActivity : BaseActivity() {
     val PAGE_RECORD = 0
     val PAGE_ABOUT = 1
+    val PAGE_VIDEO = 2
 
     private val drawerLayout by lazy {
         drawer_layout
@@ -79,6 +81,10 @@ class TaskActivity : BaseActivity() {
                     showPage(PAGE_RECORD)
                 }
 
+                R.id.list_navigation_menu_item_video_list -> {
+                    showPage(PAGE_VIDEO)
+                }
+
                 R.id.list_navigation_menu_item_about -> {
                     showPage(PAGE_ABOUT)
                 }
@@ -94,8 +100,11 @@ class TaskActivity : BaseActivity() {
 
     private fun showPage(pageId: Int) {
         val fragment = when (pageId) {
-            0 -> {
+            PAGE_RECORD -> {
                 TaskFragment.newInstance()
+            }
+            PAGE_VIDEO -> {
+                VideoFragment.newInstance()
             }
             else -> {
                 AboutFragment()
