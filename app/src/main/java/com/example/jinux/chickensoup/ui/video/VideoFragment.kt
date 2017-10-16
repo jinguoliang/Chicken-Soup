@@ -63,7 +63,6 @@ class VideoFragment : Fragment() {
             }
         }
         val buffer = StringBuffer();
-        buffer.append("the unicode: \\u9519".replace("\\\\", "\\"))
         logD(buffer.toString())
         Collections.shuffle(videoData)
         logD("video count = ${videoData.size}")
