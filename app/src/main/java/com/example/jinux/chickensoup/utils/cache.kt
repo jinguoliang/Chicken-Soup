@@ -12,7 +12,18 @@ import java.net.URL
  */
 
 object BitmapLoader {
-    private val cache = LruCache<String, Bitmap>(1024 * 1024 * 50)
+    private val cache = object : LruCache<String, Bitmap>(1024 * 1024 * 30) {
+        override fun sizeOf(key: String?, value: Bitmap?): Int {
+            if (value == null) return 0
+            return value.byteCount
+        }
+
+        override fun entryRemoved(evicted: Boolean, key: String?, oldValue: Bitmap?, newValue: Bitmap?) {
+            oldValue?.recycle()
+        }
+
+    }
+
     private val loadingList = mutableMapOf<String, (k: String, b: Bitmap?) -> Unit>()
 
     fun load(k: String, onLoaded: (k: String, b: Bitmap?) -> Unit) {
@@ -31,7 +42,7 @@ object BitmapLoader {
             try {
                 val url = URL(k)
                 val b = BitmapFactory.decodeStream(url.openStream())
-                cache.put(k, b)
+                cache.put(k, scaleBitmap(b, 0.4f))
                 loadingList[k]!!(k, cache.get(k))
             } catch (e: Exception) {
                 toast(e.toString())
